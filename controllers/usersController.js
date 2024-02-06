@@ -27,10 +27,10 @@ class UsersController {
   // insert for BASED ON USER TABLE - Email, first, last name, mobile
   //getUserID table - insert address
   async insertUser(req, res) {
-    const { email } = req.user;
+    const { email, firstName } = req.body;
     try {
       const newUser = await this.usersModel.findOrCreate({
-        where: { email: email },
+        where: { email: email, firstName: firstName },
       });
       return res.json(newUser);
     } catch (err) {
