@@ -22,17 +22,34 @@ class UsersController {
       return res.status(400).json({ error: true, msg: err });
     }
   }
-  // get request based on user email
-  // Check if no first,last,mobile, push them to Edit Profile Page.
-  // insert for BASED ON USER TABLE - Email, first, last name, mobile
-  //getUserID table - insert address
-  async insertUser(req, res) {
-    const { email, firstName } = req.body;
+
+  async findOrCreateUser(req, res) {
+    const { email, firstName, lastName, mobileNumber } = req.body;
+    console.log(`Received email:`, email);
+
     try {
-      const newUser = await this.usersModel.findOrCreate({
-        where: { email: email, firstName: firstName },
+      const [user, created] = await this.usersModel.findOrCreate({
+        where: { email: email },
+        defaults: {
+          firstName: firstName,
+          lastName: lastName,
+          mobileNumber: mobileNumber,
+        },
       });
-      return res.json(newUser);
+
+      if (!created) {
+        await this.usersModel.update(
+          {
+            firstName: firstName,
+            lastName: lastName,
+            mobileNumber: mobileNumber,
+          },
+          {
+            where: { email: email },
+          }
+        );
+      }
+      return res.json(user);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
