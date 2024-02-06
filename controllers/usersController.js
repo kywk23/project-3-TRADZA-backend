@@ -1,22 +1,38 @@
 class UsersController {
-  constructor(user) {
-    this.user = user;
+  constructor(usersModel) {
+    this.usersModel = usersModel;
   }
 
-  async getAll(req, res) {
+  async getAllUsers(req, res) {
     try {
-      const output = await this.user.findAll();
-      return res.json(output);
+      console.log("test!");
+      const users = await this.usersModel.findAll();
+      res.json(users);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
   }
 
-  async addUser(req, res) {
+  async getUserById(req, res) {
+    const { userId } = req.params;
     try {
-      const data = req.body;
-      const user = await this.user.create(data);
-      return res.json(user);
+      const user = await this.usersModel.findByPk(userId);
+      res.json(user);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+  // get request based on user email
+  // Check if no first,last,mobile, push them to Edit Profile Page.
+  // insert for BASED ON USER TABLE - Email, first, last name, mobile
+  //getUserID table - insert address
+  async insertUser(req, res) {
+    const { email, firstName } = req.body;
+    try {
+      const newUser = await this.usersModel.findOrCreate({
+        where: { email: email, firstName: firstName },
+      });
+      return res.json(newUser);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }

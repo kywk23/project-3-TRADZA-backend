@@ -1,32 +1,32 @@
 class ListingsController {
-  constructor(listing) {
-    this.listing = listing;
+  constructor(listingModel) {
+    this.listingModel = listingModel;
   }
 
   async getAll(req, res) {
     try {
-      const output = await this.listing.findAll();
+      const output = await this.listingModel.findAll();
       return res.json(output);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
   }
 
-  async getOne(req, res) {
+  async getListingById(req, res) {
     const { listingId } = req.params;
     try {
-      const listing = await this.listing.findByPk(listingId);
+      const listing = await this.listingModel.findByPk(listingId);
       return res.json(listing);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
   }
 
-  async addListing(req, res) {
+  async insertListing(req, res) {
     try {
       const data = req.body;
-      const listing = await this.listing.create(data);
-      return res.json(listing);
+      const newListing = await this.listingModel.create(data);
+      return res.json(newListing);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
