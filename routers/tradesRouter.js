@@ -12,12 +12,12 @@ class TradesRouter {
       this.tradesController.getAll.bind(this.tradesController)
     );
     router.get(
-      "/:listingId",
-      this.tradesController.getListingById.bind(this.tradesController)
+      "/:tradeId",
+      this.tradesController.getTradeById.bind(this.tradesController)
     );
     router.post(
       "/",
-      this.tradesController.insertListing.bind(this.tradesController)
+      this.tradesController.insertTrade.bind(this.tradesController)
     );
     return router;
   }
