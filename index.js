@@ -11,25 +11,25 @@ const checkJwt = auth({
 
 // importing DB
 const db = require("./db/models/index");
-const { listing, user, trade, listings_trades } = db;
+const { listing, user, address, trade, listings_trades } = db;
 
 //Importing Routers
 const UsersRouter = require("./routers/usersRouter");
 const ListingsRouter = require("./routers/listingsRouter");
-const TradesRouter = require("./routers/tradesRouter")
-const ListingsTradesRouter = require ("./routers/listingsTradesRouter")
+const TradesRouter = require("./routers/tradesRouter");
+const ListingsTradesRouter = require("./routers/listingsTradesRouter");
 
 //Importing Controllers
 const UsersControllers = require("./controllers/usersController");
 const ListingsController = require("./controllers/listingsController");
-const TradesController = require("./controllers/tradesController")
-const ListingsTradesController = require("./controllers/listingsTradesController")
+const TradesController = require("./controllers/tradesController");
+const ListingsTradesController = require("./controllers/listingsTradesController");
 
 //Initializing Controllers
-const usersControllers = new UsersControllers(user);
+const usersControllers = new UsersControllers(user, address);
 const listingsController = new ListingsController(listing);
-const tradesController = new TradesController(trade)
-const listingsTradesController = new ListingsTradesController(listings_trades)
+const tradesController = new TradesController(trade);
+const listingsTradesController = new ListingsTradesController(listings_trades);
 
 //Initializing Routers
 const usersRouter = new UsersRouter(usersControllers, checkJwt).routes();
