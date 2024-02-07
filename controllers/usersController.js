@@ -13,11 +13,27 @@ class UsersController {
     }
   }
 
+  async getUserByEmail(req, res) {
+    const { email } = req.params;
+    try {
+      const user = await this.usersModel.findOne({
+        where: { email: email },
+      });
+      if (user) {
+        return res.json(user);
+      } else {
+        return res.status(404).json({ error: true, msg: "User not found" });
+      }
+    } catch (err) {
+      return res.status(500).json({ error: true, msg: "Internal Server Error" });
+    }
+  }
+
   async getUserById(req, res) {
     const { userId } = req.params;
     try {
       const user = await this.usersModel.findByPk(userId);
-      res.json(user);
+      return res.json(user);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
