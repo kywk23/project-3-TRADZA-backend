@@ -11,23 +11,27 @@ const checkJwt = auth({
 
 // importing DB
 const db = require("./db/models/index");
-const { listing, user } = db;
+const { listing, user, trade} = db;
 
 //Importing Routers
 const UsersRouter = require("./routers/usersRouter");
 const ListingsRouter = require("./routers/listingsRouter");
+const TradesRouter = require("./routers/tradesRouter")
 
 //Importing Controllers
 const UsersControllers = require("./controllers/usersController");
 const ListingsController = require("./controllers/listingsController");
+const TradesController = require("./controllers/tradesController")
 
 //Initializing Controllers
 const usersControllers = new UsersControllers(user);
 const listingsController = new ListingsController(listing);
+const tradesController = new TradesController(trade)
 
 //Initializing Routers
 const usersRouter = new UsersRouter(usersControllers, checkJwt).routes();
-const listingRouter = new ListingsRouter(listingsController, checkJwt).routes();
+const listingsRouter = new ListingsRouter(listingsController, checkJwt).routes();
+const tradesRouter = new TradesRouter(tradesController, checkJwt).routes();
 
 // Initializing Express App
 const PORT = process.env.PORT;
@@ -39,7 +43,7 @@ app.use(express.json());
 
 //enable n use routers
 app.use("/users", usersRouter);
-app.use("/listings", listingRouter);
+app.use("/listings", listingsRouter);
 
 app.listen(PORT, () => {
   console.log(`Express app listening on port ${PORT}!`);
