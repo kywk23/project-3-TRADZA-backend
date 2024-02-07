@@ -36,7 +36,6 @@ class UsersController {
           mobileNumber: mobileNumber,
         },
       });
-
       if (!created) {
         await this.usersModel.update(
           {
