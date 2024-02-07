@@ -97,24 +97,45 @@ class UsersController {
     }
   }
 
-  async updateArea(req, res) {
-    //if userId exists, do .update
-    //if false, do .create
-
+  async updateAddress(req, res) {
     const { userId } = req.params;
-    const { area } = req.body;
-
+    const { area, zipCode } = req.body;
     try {
-      const [address, created] = await this.addressesModel.upsert(
-        { area: area, userId: userId },
-        { returning: true }
-      );
-
-      return res.json({ address, created });
+      const existingAddress = await this.addressesModel.findOne({
+        where: { userId: userId },
+      });
+      if (existingAddress) {
+        const updatedAddress = await existingAddress.update({ area: area, zipCode: zipCode });
+        return res.json({ address: updatedAddress, created: false });
+      } else {
+        const newAddress = await this.addressesModel.create({
+          userId: userId,
+          area: area,
+          zipCode: zipCode,
+        });
+        return res.json({ address: newAddress, created: true });
+      }
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
   }
+
+  // async updateArea(req, res) {
+  //   //if userId exists, do .update
+  //   //if false, do .create
+  //   const { userId } = req.params;
+  //   const { area } = req.body;
+  //   try {
+  //     const [address, created] = await this.addressesModel.upsert(
+  //       { area: area, userId: userId },
+  //       { returning: true }
+  //     );
+
+  //     return res.json({ address, created });
+  //   } catch (err) {
+  //     return res.status(400).json({ error: true, msg: err });
+  //   }
+  // }
 }
 
 module.exports = UsersController;
