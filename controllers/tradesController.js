@@ -12,22 +12,23 @@ class TradesController {
     }
   }
 
-  async getListingById(req, res) {
-    const { listingId: tradeId } = req.params;
+  async getTradeById(req, res) {
+    const { tradeId: tradeId } = req.params;
     try {
       const trade = await this.tradeModel.findByPk(tradeId);
-      return res.json(listing);
+      return res.json(trade);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
   }
 
-  async insertListing(req, res) {
+  async insertTrade(req, res) {
     try {
       const data = req.body;
       const newTrade = await this.tradeModel.create(data);
       return res.json(newTrade);
     } catch (err) {
+      console.log(err)
       return res.status(400).json({ error: true, msg: err });
     }
   }

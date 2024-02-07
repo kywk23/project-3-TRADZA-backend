@@ -10,7 +10,14 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.hasMany(models.listing);
       this.belongsToMany(models.listing, { through: "wishlist" });
-      this.hasMany(models.trade);
+      this.hasMany(models.trade, {
+        as: "Initiator",
+        foreignKey: "listingInitiator",
+      });
+      this.hasMany(models.trade, {
+        as: "Acceptor",
+        foreignKey: "listingAcceptor",
+      });
       this.hasMany(models.address);
       this.hasMany(models.message);
       this.hasMany(models.review);
