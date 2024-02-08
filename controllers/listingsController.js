@@ -1,7 +1,7 @@
 class ListingsController {
-  constructor(listingModel, categoryModel) {
+  constructor(listingModel, categoryModel, listingsCategoriesModel) {
     this.listingModel = listingModel;
-    this.categoryModel = categoryModel; 
+    this.categoryModel = categoryModel;
   }
 
   async getAll(req, res) {

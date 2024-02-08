@@ -15,6 +15,7 @@ class CategoriesRouter {
       "/create-listings-categories",
       this.categoriesController.createListingCategories.bind(this.controller)
     );
+    router.get("/:category", this.categoriesController.getListingsByCategory.bind(this.controller))
     return router;
   }
 }
