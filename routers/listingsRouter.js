@@ -14,6 +14,7 @@ class ListingsRouter {
     );
     router.get("/:listingId", this.listingsController.getListingById.bind(this.listingsController));
     router.post("/", this.listingsController.insertListing.bind(this.listingsController));
+    //router.get ("/:userId, this.listingcontrol")
     return router;
   }
 }
