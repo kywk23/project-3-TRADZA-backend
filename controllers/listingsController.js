@@ -1,6 +1,7 @@
 class ListingsController {
-  constructor(listingModel) {
+  constructor(listingModel, categoryModel) {
     this.listingModel = listingModel;
+    this.categoryModel = categoryModel; 
   }
 
   async getAll(req, res) {
@@ -19,6 +20,22 @@ class ListingsController {
       return res.json(listing);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  async getListingsByUser(req, res) {
+    const { userId, listingStatus } = req.query;
+    console.log(userId);
+    try {
+      const listings = await this.listingModel.findAll({
+        where: {
+          userId: userId,
+          listingStatus: listingStatus,
+        },
+      });
+      return res.json(listings);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err.message });
     }
   }
 
