@@ -20,10 +20,10 @@ class UsersRouters {
     //Address (AREA) Get REQ
     router.get("/address/:userId", this.userController.findAddress.bind(this.userController));
     //UPSERT control
-    router.post(
-      "/address/:userId",
+    router.put(
+      "/edit/address/:userId",
       this.checkJwt,
-      this.userController.updateArea.bind(this.userController)
+      this.userController.updateAddress.bind(this.userController)
     );
     return router;
   }
