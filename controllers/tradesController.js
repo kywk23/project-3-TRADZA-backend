@@ -13,12 +13,57 @@ class TradesController {
   }
 
   async getTradeById(req, res) {
-    const { tradeId: tradeId } = req.params;
+    const { tradeId } = req.params;
     try {
       const trade = await this.tradeModel.findByPk(tradeId);
       return res.json(trade);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  async getUserPendingTrade(req, res) {
+    const { userId, tradeStatus } = req.query;
+    try {
+      const trade = await this.tradeModel.findAll({
+        where: {
+          listingInitiator: userId,
+          tradeStatus: tradeStatus,
+        },
+      });
+      return res.json(trade);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err.message });
+    }
+  }
+
+  async getUserOngoingTrade(req, res) {
+    const { userId, tradeStatus } = req.query;
+    try {
+      const trade = await this.tradeModel.findAll({
+        where: {
+          listingInitiator: userId,
+          tradeStatus: tradeStatus,
+        },
+      });
+      return res.json(trade);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err.message });
+    }
+  }
+
+  async getUserCompletedTrade(req, res) {
+    const { userId, tradeStatus } = req.query;
+    try {
+      const trade = await this.tradeModel.findAll({
+        where: {
+          listingInitiator: userId,
+          tradeStatus: tradeStatus,
+        },
+      });
+      return res.json(trade);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err.message });
     }
   }
 
@@ -28,7 +73,7 @@ class TradesController {
       const newTrade = await this.tradeModel.create(data);
       return res.json(newTrade);
     } catch (err) {
-      console.log(err)
+      console.log(err);
       return res.status(400).json({ error: true, msg: err });
     }
   }
