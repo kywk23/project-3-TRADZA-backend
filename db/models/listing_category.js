@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
       listing_id: {
-        allowNull: false,
+        // allowNull: false,
         type: DataTypes.INTEGER,
         references: {
           model: "listings",
@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       category_id: {
-        allowNull: false,
+        // allowNull: false,
         type: DataTypes.INTEGER,
         references: {
           model: "categories",
