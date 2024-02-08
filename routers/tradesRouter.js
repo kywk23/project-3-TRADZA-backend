@@ -7,9 +7,18 @@ class TradesRouter {
     this.checkJwt = checkJwt;
   }
   routes() {
+    router.get("/", this.tradesController.getAll.bind(this.tradesController));
     router.get(
-      "/",
-      this.tradesController.getAll.bind(this.tradesController)
+      "/pending",
+      this.tradesController.getUserPendingTrade.bind(this.tradesController)
+    );
+    router.get(
+      "/ongoing",
+      this.tradesController.getUserOngoingTrade.bind(this.tradesController)
+    );
+    router.get(
+      "/completed",
+      this.tradesController.getUserCompletedTrade.bind(this.tradesController)
     );
     router.get(
       "/:tradeId",
