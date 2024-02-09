@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-class UsersRouters {
+class UsersRouter {
   constructor(controller, checkJwt) {
     this.userController = controller;
     this.checkJwt = checkJwt;
@@ -28,4 +28,4 @@ class UsersRouters {
     return router;
   }
 }
-module.exports = UsersRouters;
+module.exports = UsersRouter;

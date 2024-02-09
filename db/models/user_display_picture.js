@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.listing);
+      this.belongsTo(models.user);
     }
   }
   user_display_picture.init(
@@ -20,7 +20,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
       userId: {
-        allowNull: false,
         type: DataTypes.INTEGER,
         references: {
           model: "users",
