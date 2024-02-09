@@ -10,7 +10,7 @@ class ListingsTradesRouter {
     router.get("/", this.listingsTradesController.getAll.bind(this.listingsTradesController));
     router.get(
       "/:tradeId",
-      this.listingsTradesController.getListingTradeById.bind(this.listingsTradesController)
+      this.listingsTradesController.getListingsByTradeId.bind(this.listingsTradesController)
     );
     router.post(
       "/",

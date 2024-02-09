@@ -15,7 +15,23 @@ class ListingsTradesController {
   async getListingTradeById(req, res) {
     const { listingTradeId: listingTradeId } = req.params;
     try {
-      const listingTrade = await this.listingsTradeModel.findByPk(listingTradeId);
+      const listingTrade = await this.listingsTradeModel.findByPk(
+        listingTradeId
+      );
+      return res.json(listingTrade);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  async getListingsByTradeId(req, res) {
+    const { tradeId } = req.params;
+    try {
+      const listingTrade = await this.listingsTradeModel.findAll({
+        where: {
+          tradeId: tradeId,
+        },
+      });
       return res.json(listingTrade);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });

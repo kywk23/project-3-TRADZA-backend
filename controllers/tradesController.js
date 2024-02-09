@@ -15,7 +15,11 @@ class TradesController {
   async getTradeById(req, res) {
     const { tradeId } = req.params;
     try {
-      const trade = await this.tradeModel.findByPk(tradeId);
+      const trade = await this.tradeModel.findOne({
+        where: {
+          id: tradeId
+        },
+      });
       return res.json(trade);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
