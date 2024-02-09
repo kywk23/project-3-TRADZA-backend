@@ -1,19 +1,40 @@
 class CategoriesController {
-  constructor(categoryModel, listingModel) {
+  constructor(categoryModel, listingModel, listingsCategoriesModel) {
     this.categoryModel = categoryModel;
     this.listingModel = listingModel;
+    this.listingsCategoriesModel = listingsCategoriesModel;
     this.getAll = this.getAll.bind(this);
     this.createListingCategories = this.createListingCategories.bind(this);
+    this.getListingsByCategory = this.getListingsByCategory.bind(this);
   }
 
   async getAll(req, res) {
     try {
       const output = await this.categoryModel.findAll();
-      console.log(this.categoryModel);
-      console.log(this.listingModel);
       return res.json(output);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  async getListingsByCategory(req, res) {
+    const { category } = req.params;
+    console.log(category)
+    const categoryFind = await this.categoryModel.findOne({
+      where: {
+        name: category
+      }
+    });
+    const categoryId = categoryFind.id
+    try {
+      const listings = await this.listingsCategoriesModel.findAll({
+        where: {
+          categoryId: categoryId,
+        }
+      });
+      return res.json(listings);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err.message });
     }
   }
 

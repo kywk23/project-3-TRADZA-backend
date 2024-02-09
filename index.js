@@ -11,7 +11,7 @@ const checkJwt = auth({
 
 // importing DB
 const db = require("./db/models/index");
-const { listing, user, address, trade, listings_trades, category } = db;
+const { listing, user, address, trade, listings_trades, category, listing_category } = db;
 
 //Importing Routers
 const UsersRouter = require("./routers/usersRouter");
@@ -32,7 +32,7 @@ const usersControllers = new UsersControllers(user, address);
 const listingsController = new ListingsController(listing, category);
 const tradesController = new TradesController(trade);
 const listingsTradesController = new ListingsTradesController(listings_trades);
-const categoriesController = new CategoriesController(category, listing);
+const categoriesController = new CategoriesController(category, listing, listing_category);
 
 //Initializing Routers
 const usersRouter = new UsersRouter(usersControllers, checkJwt).routes();
