@@ -19,8 +19,10 @@ const {
   trade,
   listings_trades,
   category,
+  listing_category,
   user_display_picture,
   trade_room,
+  message,
 } = db;
 
 async function initializeApp() {
@@ -63,6 +65,11 @@ async function initializeApp() {
   const messagesRouter = new MessagesRouter(messagesController).routes();
   const imagesRouter = new ImagesRouter(imagesController, checkJwt).routes();
 
+  // Initializing Express App
+  const PORT = process.env.PORT;
+  const app = express();
+  app.use(cors());
+  app.use(express.json());
   //enable n use routers
   app.use("/users", usersRouter);
   app.use("/listings", listingsRouter);
@@ -70,7 +77,7 @@ async function initializeApp() {
   app.use("/listingsTrades", listingsTradesRouter);
   app.use("/categories", categoriesRouter);
   app.use("/messages", messagesRouter);
-  app.use("images", imagesRouter);
+  app.use("/images", imagesRouter);
 
   //Chat
   const http = require("http").Server(app);

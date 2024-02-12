@@ -21,17 +21,13 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.address);
       this.hasMany(models.message, {
         as: "Sender",
-        foreignKey: "senderId"
+        foreignKey: "senderId",
       });
       this.hasMany(models.review);
-<<<<<<< HEAD
       this.hasMany(models.user_display_picture, {
         as: "user",
         foreignKey: "userId",
       });
-=======
-      this.hasMany(models.user_display_picture);
->>>>>>> main
     }
   }
   user.init(
