@@ -11,7 +11,17 @@ const checkJwt = auth({
 
 // importing DB
 const db = require("./db/models/index");
-const { listing, user, address, trade, listings_trades, category, listing_category } = db;
+const {
+  listing,
+  user,
+  address,
+  trade,
+  listings_trades,
+  category,
+  listing_category,
+  message,
+  trade_room,
+} = db;
 
 //Importing Routers
 const UsersRouter = require("./routers/usersRouter");
@@ -19,6 +29,7 @@ const ListingsRouter = require("./routers/listingsRouter");
 const TradesRouter = require("./routers/tradesRouter");
 const ListingsTradesRouter = require("./routers/listingsTradesRouter");
 const CategoriesRouter = require("./routers/categoriesRouter");
+const MessagesRouter = require("./routers/messagesRouter");
 
 //Importing Controllers
 const UsersControllers = require("./controllers/usersController");
@@ -26,20 +37,32 @@ const ListingsController = require("./controllers/listingsController");
 const TradesController = require("./controllers/tradesController");
 const ListingsTradesController = require("./controllers/listingsTradesController");
 const CategoriesController = require("./controllers/categoriesController");
+const MessagesController = require("./controllers/messagesController");
 
 //Initializing Controllers
 const usersControllers = new UsersControllers(user, address);
 const listingsController = new ListingsController(listing, category);
-const tradesController = new TradesController(trade);
+const tradesController = new TradesController(trade, listings_trades);
 const listingsTradesController = new ListingsTradesController(listings_trades);
-const categoriesController = new CategoriesController(category, listing, listing_category);
+const categoriesController = new CategoriesController(
+  category,
+  listing,
+  listing_category
+);
+const messagesController = new MessagesController(message, trade_room);
 
 //Initializing Routers
 const usersRouter = new UsersRouter(usersControllers, checkJwt).routes();
-const listingsRouter = new ListingsRouter(listingsController, checkJwt).routes();
+const listingsRouter = new ListingsRouter(
+  listingsController,
+  checkJwt
+).routes();
 const tradesRouter = new TradesRouter(tradesController, checkJwt).routes();
-const listingsTradesRouter = new ListingsTradesRouter(listingsTradesController).routes();
+const listingsTradesRouter = new ListingsTradesRouter(
+  listingsTradesController
+).routes();
 const categoriesRouter = new CategoriesRouter(categoriesController).routes();
+const messagesRouter = new MessagesRouter(messagesController).routes();
 
 // Initializing Express App
 const PORT = process.env.PORT;
@@ -54,8 +77,39 @@ app.use("/users", usersRouter);
 app.use("/listings", listingsRouter);
 app.use("/trades", tradesRouter);
 app.use("/listingsTrades", listingsTradesRouter);
-app.use("/categories", categoriesRouter)
+app.use("/categories", categoriesRouter);
+app.use("/messages", messagesRouter);
 
-app.listen(PORT, () => {
-  console.log(`Express app listening on port ${PORT}!`);
+//Chat
+const http = require("http").Server(app);
+const socketIO = require("socket.io")(http, {
+  cors: { origin: "http://localhost:5173" },
+});
+
+const socketNamespace = socketIO.of("/messageRoom");
+
+socketNamespace.on("connection", async (socket) => {
+  console.log(`${socket.id}, user just connected`);
+
+  socket.on("message", (message) => {
+    console.log("Message received", message.text);
+    socketNamespace.emit("messageResponse", message);
+  });
+
+  socket.on("typing", (typing) => {
+    if (typing) {
+      socketNamespace.emit("isTyping", true);
+    } else {
+      socketNamespace.emit("isTyping", false);
+    }
+  });
+
+  socket.on("disconnect", () => {
+    console.log("A user has abandoned us");
+    socket.disconnect();
+  });
+});
+
+http.listen(PORT, () => {
+  console.log("Application listening to port 3000");
 });

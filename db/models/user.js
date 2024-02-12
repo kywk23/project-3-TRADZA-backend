@@ -19,8 +19,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "listingAcceptor",
       });
       this.hasMany(models.address);
-      this.hasMany(models.message);
+      this.hasMany(models.message, {
+        as: "Sender",
+        foreignKey: "senderId"
+      });
       this.hasMany(models.review);
+      this.hasMany(models.user_display_picture);
     }
   }
   user.init(

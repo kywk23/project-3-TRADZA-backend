@@ -19,20 +19,32 @@ class CategoriesController {
 
   async getListingsByCategory(req, res) {
     const { category } = req.params;
-    console.log(category)
+    console.log(category);
     const categoryFind = await this.categoryModel.findOne({
       where: {
-        name: category
-      }
+        name: category,
+      },
     });
-    const categoryId = categoryFind.id
+    const categoryId = categoryFind.id;
     try {
-      const listings = await this.listingsCategoriesModel.findAll({
+      const listingsCategories = await this.listingsCategoriesModel.findAll({
         where: {
           categoryId: categoryId,
-        }
+        },
       });
-      return res.json(listings);
+
+      const listingIds = listingsCategories.map((listing) => listing.listingId);
+
+      const listingsDetails = await Promise.all(
+        listingIds.map((listingId) =>
+          this.listingModel.findOne({
+            where: {
+              id: listingId,
+            },
+          })
+        )
+      );
+      return res.json(listingsDetails)
     } catch (err) {
       return res.status(400).json({ error: true, msg: err.message });
     }
