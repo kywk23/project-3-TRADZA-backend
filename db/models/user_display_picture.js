@@ -8,10 +8,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+<<<<<<< HEAD
       this.belongsTo(models.user, {
         as: "user",
         foreignKey: "userId",
       });
+=======
+      this.belongsTo(models.user);
+>>>>>>> main
     }
   }
   user_display_picture.init(

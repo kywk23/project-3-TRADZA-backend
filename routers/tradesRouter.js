@@ -9,8 +9,14 @@ class TradesRouter {
   routes() {
     router.get("/", this.tradesController.getAll.bind(this.tradesController));
     router.get(
-      "/pending",
-      this.tradesController.getUserPendingTrade.bind(this.tradesController)
+      "/pending/initiator",
+      this.tradesController.getUserInitiatorPendingTrade.bind(this.tradesController)
+    );
+    router.get(
+      "/pending/acceptor",
+      this.tradesController.getUserAcceptorPendingTrade.bind(
+        this.tradesController
+      )
     );
     router.get(
       "/ongoing",
@@ -28,7 +34,15 @@ class TradesRouter {
       "/",
       this.tradesController.insertTrade.bind(this.tradesController)
     );
-    return router;
+    router.delete(
+      "/delete-trade",
+      this.tradesController.deleteTrade.bind(this.tradesController)
+    );
+    router.put(
+      "/update-status",
+      this.tradesController.updateTradeStatus.bind(this.tradesController)
+    );
+    return router; 
   }
 }
 

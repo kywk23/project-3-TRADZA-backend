@@ -10,11 +10,17 @@ class ListingsTradesRouter {
     router.get("/", this.listingsTradesController.getAll.bind(this.listingsTradesController));
     router.get(
       "/:tradeId",
-      this.listingsTradesController.getListingTradeById.bind(this.listingsTradesController)
+      this.listingsTradesController.getListingsByTradeId.bind(this.listingsTradesController)
     );
     router.post(
       "/",
       this.listingsTradesController.insertListingTrade.bind(this.listingsTradesController)
+    );
+    router.delete(
+      "/:listingTradeId",
+      this.listingsTradesController.deleteListingTrade.bind(
+        this.listingsTradesController
+      )
     );
     return router;
   }

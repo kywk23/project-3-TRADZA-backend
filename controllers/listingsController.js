@@ -1,7 +1,7 @@
 class ListingsController {
-  constructor(listingModel, categoryModel) {
+  constructor(listingModel, categoryModel, listingsCategoriesModel) {
     this.listingModel = listingModel;
-    this.categoryModel = categoryModel; 
+    this.categoryModel = categoryModel;
   }
 
   async getAll(req, res) {
@@ -25,7 +25,6 @@ class ListingsController {
 
   async getListingsByUser(req, res) {
     const { userId, listingStatus } = req.query;
-    console.log(userId);
     try {
       const listings = await this.listingModel.findAll({
         where: {

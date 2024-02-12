@@ -1,6 +1,10 @@
+const { Op } = require("sequelize");
+
 class TradesController {
-  constructor(tradeModel) {
+  constructor(tradeModel, listingsTradesModel) {
     this.tradeModel = tradeModel;
+    this.listingsTradesModel = listingsTradesModel;
+    // this.deleteTrade = this.deleteTrade.bind(this);
   }
 
   async getAll(req, res) {
@@ -15,19 +19,38 @@ class TradesController {
   async getTradeById(req, res) {
     const { tradeId } = req.params;
     try {
-      const trade = await this.tradeModel.findByPk(tradeId);
+      const trade = await this.tradeModel.findOne({
+        where: {
+          id: tradeId,
+        },
+      });
       return res.json(trade);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
   }
 
-  async getUserPendingTrade(req, res) {
+  async getUserInitiatorPendingTrade(req, res) {
     const { userId, tradeStatus } = req.query;
     try {
       const trade = await this.tradeModel.findAll({
         where: {
           listingInitiator: userId,
+          tradeStatus: tradeStatus,
+        },
+      });
+      return res.json(trade);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err.message });
+    }
+  }
+
+  async getUserAcceptorPendingTrade(req, res) {
+    const { userId, tradeStatus } = req.query;
+    try {
+      const trade = await this.tradeModel.findAll({
+        where: {
+          listingAcceptor: userId,
           tradeStatus: tradeStatus,
         },
       });
@@ -42,7 +65,7 @@ class TradesController {
     try {
       const trade = await this.tradeModel.findAll({
         where: {
-          listingInitiator: userId,
+          [Op.or]: [{ listingInitiator: userId }, { listingAcceptor: userId }],
           tradeStatus: tradeStatus,
         },
       });
@@ -57,7 +80,7 @@ class TradesController {
     try {
       const trade = await this.tradeModel.findAll({
         where: {
-          listingInitiator: userId,
+          [Op.or]: [{ listingInitiator: userId }, { listingAcceptor: userId }],
           tradeStatus: tradeStatus,
         },
       });
@@ -75,6 +98,52 @@ class TradesController {
     } catch (err) {
       console.log(err);
       return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  async updateTradeStatus(req, res) {
+    const { tradeId, newTradeStatus } = req.body;
+    try {
+      const updatedTrade = await this.tradeModel.update(
+        {
+          tradeStatus: newTradeStatus,
+        },
+        {
+          where: {
+            id: tradeId,
+          },
+        }
+      );
+      const trade = await this.tradeModel.findByPk(tradeId);
+      return res.json(trade);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err.message });
+    }
+  }
+
+  async deleteTrade(req, res) {
+    const { tradeId } = req.body;
+    try {
+      const deletedListingsResult = await this.listingsTradesModel.destroy({
+        where: {
+          tradeId: tradeId,
+        },
+      });
+
+      const result = await this.tradeModel.destroy({
+        where: {
+          id: tradeId,
+        },
+      });
+
+      if (result === 1) {
+        return res.json({ success: true, msg: "Trade deleted successfully." });
+      } else {
+        return res.status(404).json({ error: true, msg: "Trade not found." });
+      }
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: true, msg: err.message });
     }
   }
 }
