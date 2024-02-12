@@ -119,23 +119,6 @@ class UsersController {
       return res.status(400).json({ error: true, msg: err });
     }
   }
-
-  // async updateArea(req, res) {
-  //   //if userId exists, do .update
-  //   //if false, do .create
-  //   const { userId } = req.params;
-  //   const { area } = req.body;
-  //   try {
-  //     const [address, created] = await this.addressesModel.upsert(
-  //       { area: area, userId: userId },
-  //       { returning: true }
-  //     );
-
-  //     return res.json({ address, created });
-  //   } catch (err) {
-  //     return res.status(400).json({ error: true, msg: err });
-  //   }
-  // }
 }
 
 module.exports = UsersController;

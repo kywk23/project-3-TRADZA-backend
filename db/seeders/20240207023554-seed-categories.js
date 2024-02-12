@@ -7,28 +7,28 @@ module.exports = {
       "categories",
       [
         {
-          name: "Electronics",
+          name: "electronics",
         },
         {
-          name: "Kitchenware",
+          name: "kitchenware",
         },
         {
-          name: "Toys & Games",
+          name: "toys_games",
         },
         {
-          name: "Health & Beauty",
+          name: "healthy_beauty",
         },
         {
-          name: "Office Products",
+          name: "office_products",
         },
         {
-          name: "Travel",
+          name: "travel",
         },
         {
-          name: "Musical Instruments",
+          name: "musical_instruments",
         },
         {
-          name: "Clothing, Shoes & Jewelry",
+          name: "clothing_shoes_jewelry",
         },
       ],
       {}
