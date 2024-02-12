@@ -16,6 +16,12 @@ class ListingsTradesRouter {
       "/",
       this.listingsTradesController.insertListingTrade.bind(this.listingsTradesController)
     );
+    router.delete(
+      "/:listingTradeId",
+      this.listingsTradesController.deleteListingTrade.bind(
+        this.listingsTradesController
+      )
+    );
     return router;
   }
 }

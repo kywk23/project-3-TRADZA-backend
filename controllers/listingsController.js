@@ -25,7 +25,6 @@ class ListingsController {
 
   async getListingsByUser(req, res) {
     const { userId, listingStatus } = req.query;
-    console.log(userId);
     try {
       const listings = await this.listingModel.findAll({
         where: {
