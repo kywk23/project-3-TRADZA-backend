@@ -11,6 +11,11 @@ class ImagesRouter {
       "/displaypictures/:userId",
       this.imagesController.getImagesByUserId.bind(this.imagesController)
     );
+    router.post(
+      "/displaypictures/:userId",
+      this.checkJwt,
+      this.imagesController.addImages.bind(this.imagesController)
+    );
     return router;
   }
 }

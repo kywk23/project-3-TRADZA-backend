@@ -1,5 +1,5 @@
 "use strict";
-const { Model } = require("sequelize");
+const { Model, HasMany } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
     /**
@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.address);
       this.hasMany(models.message);
       this.hasMany(models.review);
+      this.hasMany(models.user_display_picture, {
+        as: "user",
+        foreignKey: "userId",
+      });
     }
   }
   user.init(
