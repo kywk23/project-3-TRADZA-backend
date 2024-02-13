@@ -101,6 +101,39 @@ class TradesController {
     }
   }
 
+  async updateAgreedStatus(req, res) {
+    const { tradeId, whoAgreed } = req.body;
+    console.log(whoAgreed);
+    let updatedAgree;
+    try {
+      if (whoAgreed === "initiator") {
+        updatedAgree = await this.tradeModel.update(
+          {
+            initiatorAgreed: true,
+          },
+          {
+            where: {
+              id: tradeId,
+            },
+          }
+        );
+      } else if (whoAgreed === "acceptor") {
+        updatedAgree = await this.tradeModel.update(
+          {
+            acceptorAgreed: true,
+          },
+          {
+            where: {
+              id: tradeId,
+            },
+          }
+        );
+      }
+      return res.json(updatedAgree);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err.message });
+    }
+  }
   async updateTradeStatus(req, res) {
     const { tradeId, newTradeStatus } = req.body;
     try {
