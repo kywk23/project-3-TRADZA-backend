@@ -1,7 +1,8 @@
 class MessagesController {
-  constructor(messageModel, traderoomModel) {
+  constructor(messageModel, traderoomModel, tradeModel) {
     this.messageModel = messageModel;
     this.traderoomModel = traderoomModel;
+    this.tradeModel = tradeModel;
   }
 
   async getAll(req, res) {
@@ -16,11 +17,13 @@ class MessagesController {
   async getMessagesByTradeId(req, res) {
     const { tradeId } = req.params;
     try {
-      const messages = await this.traderoomModel.findAll({
+      const messages = await this.tradeModel.findOne({
         where: {
-          tradeId: tradeId,
-        },
-      });
+          id: tradeId,
+        }, 
+          include: [this.messageModel]
+        }
+      );
       return res.json(messages);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -29,14 +32,17 @@ class MessagesController {
 
   async insertMessage(req, res) {
     try {
-      const data = req.body;
-      const newMessage = await this.messageModel.create(data);
-      const messageId = newMessage.id
+      const { username, text, tradeId } = req.body;
+      const newMessage = await this.messageModel.create({
+        senderId: username,
+        content: text,
+      });
+      const messageId = newMessage.id;
       const newtradeMessage = await this.traderoomModel.create({
         messageId: messageId,
-        tradeId: 47
+        tradeId: tradeId,
       });
-      return res.json(newtradeMessage)
+      return res.json(newtradeMessage);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }

@@ -45,6 +45,10 @@ class TradesRouter {
       this.tradesController.updateAgreedStatus.bind(this.tradesController)
     );
     router.put(
+      "/reverse-update-agree-status",
+      this.tradesController.reverseUpdateAgreedStatus.bind(this.tradesController)
+    );
+    router.put(
       "/update-status",
       this.tradesController.updateTradeStatus.bind(this.tradesController)
     );
