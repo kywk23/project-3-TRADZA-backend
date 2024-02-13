@@ -51,6 +51,16 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING,
       },
+      initiatorAgreed: {     
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      acceptorAgreed: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,

@@ -53,7 +53,7 @@ async function initializeApp() {
   const tradesController = new TradesController(trade, listings_trades);
   const listingsTradesController = new ListingsTradesController(listings_trades);
   const categoriesController = new CategoriesController(category, listing, listing_category);
-  const messagesController = new MessagesController(message, trade_room);
+  const messagesController = new MessagesController(message, trade_room, trade);
   const imagesController = new ImagesController(user_display_picture);
 
   //Initializing Routers
