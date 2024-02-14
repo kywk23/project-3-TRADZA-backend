@@ -8,6 +8,13 @@ class ListingDisplayPictureRouter {
   }
   routes() {
     router.get(
+      "/",
+      this.listingDisplayPictureController.getAllListingImages.bind(
+        this.listingDisplayPictureController
+      )
+    );
+
+    router.get(
       "/:listingId",
       this.listingDisplayPictureController.getListingImageByListingId.bind(
         this.listingDisplayPictureController

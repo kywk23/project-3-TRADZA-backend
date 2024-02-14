@@ -66,9 +66,12 @@ async function initializeApp() {
   const usersRouter = new UsersRouter(usersControllers, checkJwt).routes();
   const listingsRouter = new ListingsRouter(listingsController, checkJwt).routes();
   const tradesRouter = new TradesRouter(tradesController, checkJwt).routes();
-  const listingsTradesRouter = new ListingsTradesRouter(listingsTradesController).routes();
-  const categoriesRouter = new CategoriesRouter(categoriesController).routes();
-  const messagesRouter = new MessagesRouter(messagesController).routes();
+  const listingsTradesRouter = new ListingsTradesRouter(
+    listingsTradesController,
+    checkJwt
+  ).routes();
+  const categoriesRouter = new CategoriesRouter(categoriesController, checkJwt).routes();
+  const messagesRouter = new MessagesRouter(messagesController, checkJwt).routes();
   const imagesRouter = new ImagesRouter(imagesController, checkJwt).routes();
   const listingDisplayPictureRouter = new ListingDisplayPictureRouter(
     listingDisplayPictureController,
@@ -80,6 +83,7 @@ async function initializeApp() {
   const app = express();
   app.use(cors());
   app.use(express.json());
+
   //enable n use routers
   app.use("/users", usersRouter);
   app.use("/listings", listingsRouter);
