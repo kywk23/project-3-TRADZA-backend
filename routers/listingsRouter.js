@@ -23,7 +23,7 @@ class ListingsRouter {
       "/",
       this.listingsController.insertListing.bind(this.listingsController)
     );
-    //router.get ("/:userId, this.listingcontrol")
+    router.put("/change-reserved-status", this.listingsController.changeReservedStatus.bind(this.controller));
     return router;
   }
 }
