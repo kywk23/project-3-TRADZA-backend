@@ -20,10 +20,9 @@ class MessagesController {
       const messages = await this.tradeModel.findOne({
         where: {
           id: tradeId,
-        }, 
-          include: [this.messageModel]
-        }
-      );
+        },
+        include: [this.messageModel],
+      });
       return res.json(messages);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });

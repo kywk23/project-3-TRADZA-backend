@@ -31,6 +31,7 @@ class ListingsController {
           userId: userId,
           listingStatus: listingStatus,
         },
+        include: [this.categoryModel],
       });
       return res.json(listings);
     } catch (err) {
