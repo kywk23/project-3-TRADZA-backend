@@ -1,12 +1,16 @@
 class ListingsController {
-  constructor(listingModel, categoryModel, listingsCategoriesModel) {
+  constructor(listingModel, categoryModel, usersModel, listingDisplayPictureModel) {
     this.listingModel = listingModel;
     this.categoryModel = categoryModel;
+    this.usersModel = usersModel;
+    this.listingDisplayPictureModel = listingDisplayPictureModel;
   }
 
   async getAll(req, res) {
     try {
-      const output = await this.listingModel.findAll();
+      const output = await this.listingModel.findAll({
+        include: [this.categoryModel, this.usersModel, this.listingDisplayPictureModel],
+      });
       return res.json(output);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
