@@ -23,6 +23,7 @@ const {
   user_display_picture,
   trade_room,
   message,
+  listing_display_picture,
 } = db;
 
 async function initializeApp() {
@@ -37,6 +38,7 @@ async function initializeApp() {
   const CategoriesRouter = require("./routers/categoriesRouter");
   const ImagesRouter = require("./routers/imagesRouter");
   const MessagesRouter = require("./routers/messagesRouter");
+  const ListingDisplayPictureRouter = require("./routers/listingDisplayPictureRouter");
 
   //Importing Controllers
   const UsersControllers = require("./controllers/usersController");
@@ -46,6 +48,7 @@ async function initializeApp() {
   const CategoriesController = require("./controllers/categoriesController");
   const ImagesController = require("./controllers/imagesController");
   const MessagesController = require("./controllers/messagesController");
+  const ListingDisplayPictureController = require("./controllers/listingDisplayPictureController");
 
   //Initializing Controllers
   const usersControllers = new UsersControllers(user, address);
@@ -55,21 +58,32 @@ async function initializeApp() {
   const categoriesController = new CategoriesController(category, listing, listing_category);
   const messagesController = new MessagesController(message, trade_room, trade);
   const imagesController = new ImagesController(user_display_picture);
+  const listingDisplayPictureController = new ListingDisplayPictureController(
+    listing_display_picture
+  );
 
   //Initializing Routers
   const usersRouter = new UsersRouter(usersControllers, checkJwt).routes();
   const listingsRouter = new ListingsRouter(listingsController, checkJwt).routes();
   const tradesRouter = new TradesRouter(tradesController, checkJwt).routes();
-  const listingsTradesRouter = new ListingsTradesRouter(listingsTradesController).routes();
-  const categoriesRouter = new CategoriesRouter(categoriesController).routes();
-  const messagesRouter = new MessagesRouter(messagesController).routes();
+  const listingsTradesRouter = new ListingsTradesRouter(
+    listingsTradesController,
+    checkJwt
+  ).routes();
+  const categoriesRouter = new CategoriesRouter(categoriesController, checkJwt).routes();
+  const messagesRouter = new MessagesRouter(messagesController, checkJwt).routes();
   const imagesRouter = new ImagesRouter(imagesController, checkJwt).routes();
+  const listingDisplayPictureRouter = new ListingDisplayPictureRouter(
+    listingDisplayPictureController,
+    checkJwt
+  ).routes();
 
   // Initializing Express App
   const PORT = process.env.PORT;
   const app = express();
   app.use(cors());
   app.use(express.json());
+
   //enable n use routers
   app.use("/users", usersRouter);
   app.use("/listings", listingsRouter);
@@ -78,6 +92,7 @@ async function initializeApp() {
   app.use("/categories", categoriesRouter);
   app.use("/messages", messagesRouter);
   app.use("/images", imagesRouter);
+  app.use("/listingImages", listingDisplayPictureRouter);
 
   //Chat
   const http = require("http").Server(app);
