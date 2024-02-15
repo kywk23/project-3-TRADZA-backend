@@ -52,10 +52,21 @@ async function initializeApp() {
 
   //Initializing Controllers
   const usersControllers = new UsersControllers(user, address);
-  const listingsController = new ListingsController(listing, category);
+  const listingsController = new ListingsController(
+    listing,
+    category,
+    user,
+    listing_display_picture
+  );
   const tradesController = new TradesController(trade, listings_trades);
   const listingsTradesController = new ListingsTradesController(listings_trades);
-  const categoriesController = new CategoriesController(category, listing, listing_category);
+  const categoriesController = new CategoriesController(
+    category,
+    listing,
+    listing_category,
+    user,
+    listing_display_picture
+  );
   const messagesController = new MessagesController(message, trade_room, trade);
   const imagesController = new ImagesController(user_display_picture);
   const listingDisplayPictureController = new ListingDisplayPictureController(

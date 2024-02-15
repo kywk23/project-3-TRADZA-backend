@@ -1,8 +1,16 @@
 class CategoriesController {
-  constructor(categoryModel, listingModel, listingsCategoriesModel) {
+  constructor(
+    categoryModel,
+    listingModel,
+    listingsCategoriesModel,
+    usersModel,
+    listingDisplayPictureModel
+  ) {
     this.categoryModel = categoryModel;
     this.listingModel = listingModel;
     this.listingsCategoriesModel = listingsCategoriesModel;
+    this.usersModel = usersModel;
+    this.listingDisplayPictureModel = listingDisplayPictureModel;
     this.getAll = this.getAll.bind(this);
     this.createListingCategories = this.createListingCategories.bind(this);
     this.getListingsByCategory = this.getListingsByCategory.bind(this);
@@ -41,10 +49,11 @@ class CategoriesController {
             where: {
               id: listingId,
             },
+            include: [this.categoryModel, this.usersModel, this.listingDisplayPictureModel],
           })
         )
       );
-      return res.json(listingsDetails)
+      return res.json(listingsDetails);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err.message });
     }
