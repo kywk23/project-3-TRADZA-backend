@@ -20,10 +20,9 @@ class MessagesController {
       const messages = await this.tradeModel.findOne({
         where: {
           id: tradeId,
-        }, 
-          include: [this.messageModel]
-        }
-      );
+        },
+        include: [this.messageModel],
+      });
       return res.json(messages);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -32,10 +31,11 @@ class MessagesController {
 
   async insertMessage(req, res) {
     try {
-      const { username, text, tradeId } = req.body;
+      const { senderId, content, tradeId, timestamp } = req.body;
       const newMessage = await this.messageModel.create({
-        senderId: username,
-        content: text,
+        senderId: senderId,
+        content: content,
+        timestamp: timestamp
       });
       const messageId = newMessage.id;
       const newtradeMessage = await this.traderoomModel.create({
