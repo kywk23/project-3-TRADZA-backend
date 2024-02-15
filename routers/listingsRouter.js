@@ -14,7 +14,10 @@ class ListingsRouter {
     );
     router.get("/:listingId", this.listingsController.getListingById.bind(this.listingsController));
     router.post("/", this.listingsController.insertListing.bind(this.listingsController));
-
+    router.put(
+      "/change-reserved-status",
+      this.listingsController.changeReservedStatus.bind(this.controller)
+    );
     return router;
   }
 }

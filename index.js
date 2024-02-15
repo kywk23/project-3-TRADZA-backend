@@ -111,26 +111,25 @@ async function initializeApp() {
     cors: { origin: "http://localhost:5173" },
   });
 
-  const socketNamespace = socketIO.of("/messageRoom");
+  const io = socketIO.of("/messageRoom");
 
-  socketNamespace.on("connection", async (socket) => {
+  io.on("connection", async (socket) => {
     console.log(`${socket.id}, user just connected`);
 
     socket.on("message", (message) => {
-      console.log("Message received", message.text);
-      socketNamespace.emit("messageResponse", message);
+      io.emit("messageResponse", message);
     });
 
     socket.on("typing", (typing) => {
       if (typing) {
-        socketNamespace.emit("isTyping", true);
+        io.emit("isTyping", true);
       } else {
-        socketNamespace.emit("isTyping", false);
+        io.emit("isTyping", false);
       }
     });
 
     socket.on("disconnect", () => {
-      console.log("A user has abandoned us");
+      console.log("User disconnected");
       socket.disconnect();
     });
   });

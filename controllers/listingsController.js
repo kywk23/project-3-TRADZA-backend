@@ -4,6 +4,7 @@ class ListingsController {
     this.categoryModel = categoryModel;
     this.usersModel = usersModel;
     this.listingDisplayPictureModel = listingDisplayPictureModel;
+    this.changeReservedStatus = this.changeReservedStatus.bind(this);
   }
 
   async getAll(req, res) {
@@ -48,6 +49,25 @@ class ListingsController {
       const data = req.body;
       const newListing = await this.listingModel.create(data);
       return res.json(newListing);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  async changeReservedStatus(req, res) {
+    try {
+      const { newListingReservedStatus, listingId } = req.body;
+      const listing = await this.listingModel.update(
+        {
+          reserved: newListingReservedStatus,
+        },
+        {
+          where: {
+            id: listingId,
+          },
+        }
+      );
+      return res.json(listing);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }

@@ -4,7 +4,6 @@ class TradesController {
   constructor(tradeModel, listingsTradesModel) {
     this.tradeModel = tradeModel;
     this.listingsTradesModel = listingsTradesModel;
-    // this.deleteTrade = this.deleteTrade.bind(this);
   }
 
   async getAll(req, res) {
