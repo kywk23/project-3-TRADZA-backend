@@ -1,10 +1,5 @@
 class ListingsController {
-  constructor(
-    listingModel,
-    categoryModel,
-    usersModel,
-    listingDisplayPictureModel
-  ) {
+  constructor(listingModel, categoryModel, usersModel, listingDisplayPictureModel) {
     this.listingModel = listingModel;
     this.categoryModel = categoryModel;
     this.usersModel = usersModel;
@@ -17,11 +12,7 @@ class ListingsController {
   async getAll(req, res) {
     try {
       const output = await this.listingModel.findAll({
-        include: [
-          this.categoryModel,
-          this.usersModel,
-          this.listingDisplayPictureModel,
-        ],
+        include: [this.categoryModel, this.usersModel, this.listingDisplayPictureModel],
       });
       return res.json(output);
     } catch (err) {
@@ -35,11 +26,7 @@ class ListingsController {
         where: {
           listingStatus: true,
         },
-        include: [
-          this.categoryModel,
-          this.usersModel,
-          this.listingDisplayPictureModel,
-        ],
+        include: [this.categoryModel, this.usersModel, this.listingDisplayPictureModel],
       });
       return res.json(output);
     } catch (err) {
@@ -50,7 +37,9 @@ class ListingsController {
   async getListingById(req, res) {
     const { listingId } = req.params;
     try {
-      const listing = await this.listingModel.findByPk(listingId);
+      const listing = await this.listingModel.findByPk(listingId, {
+        include: [this.usersModel, this.listingDisplayPictureModel],
+      });
       return res.json(listing);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
