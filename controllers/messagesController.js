@@ -35,7 +35,7 @@ class MessagesController {
       const newMessage = await this.messageModel.create({
         senderId: senderId,
         content: content,
-        timestamp: timestamp
+        timestamp: timestamp,
       });
       const messageId = newMessage.id;
       const newtradeMessage = await this.traderoomModel.create({
@@ -45,6 +45,29 @@ class MessagesController {
       return res.json(newtradeMessage);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  async deleteAllMessagesByTradeId(req, res) {
+    try {
+      const { tradeId } = req.body;
+      console.log(tradeId)
+      await this.traderoomModel.destroy({
+        where: { tradeId: tradeId },
+      });
+      await this.messageModel.destroy({
+        where: { tradeId: tradeId },
+      });
+      res
+        .status(200)
+        .send({
+          message: "Messages and TradeRoom entries deleted successfully.",
+        });
+    } catch (err) {
+      console.error(err);
+      res
+        .status(500)
+        .send({ error: "An error occurred while deleting messages." });
     }
   }
 }
