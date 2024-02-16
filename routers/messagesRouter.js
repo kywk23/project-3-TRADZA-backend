@@ -19,6 +19,10 @@ class MessagesRouter {
       "/",
       this.messagesController.insertMessage.bind(this.messagesController)
     );
+    router.delete(
+      "/deleteTradeRoom",
+      this.messagesController.deleteAllMessagesByTradeId.bind(this.messagesController)
+    );
     return router;
   }
 }

@@ -12,6 +12,10 @@ class ListingsRouter {
       this.listingsController.getAll.bind(this.listingsController)
     );
     router.get(
+      "/available-listings",
+      this.listingsController.getAllUnsoldListings.bind(this.listingsController)
+    );
+    router.get(
       "/user-listings",
       this.listingsController.getListingsByUser.bind(this.listingsController)
     );
@@ -22,6 +26,10 @@ class ListingsRouter {
     router.post(
       "/",
       this.listingsController.insertListing.bind(this.listingsController)
+    );
+    router.put(
+      "/update-listing-statuses",
+      this.listingsController.changeListingsStatuses.bind(this.controller)
     );
     router.put(
       "/change-reserved-status",

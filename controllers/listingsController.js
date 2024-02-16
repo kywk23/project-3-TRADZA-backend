@@ -11,11 +11,30 @@ class ListingsController {
     this.listingDisplayPictureModel = listingDisplayPictureModel;
     this.changeReservedStatus = this.changeReservedStatus.bind(this);
     this.changeReservedStatuses = this.changeReservedStatuses.bind(this);
+    this.changeListingsStatuses = this.changeListingsStatuses.bind(this);
   }
 
   async getAll(req, res) {
     try {
       const output = await this.listingModel.findAll({
+        include: [
+          this.categoryModel,
+          this.usersModel,
+          this.listingDisplayPictureModel,
+        ],
+      });
+      return res.json(output);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  async getAllUnsoldListings(req, res) {
+    try {
+      const output = await this.listingModel.findAll({
+        where: {
+          listingStatus: true,
+        },
         include: [
           this.categoryModel,
           this.usersModel,
@@ -61,6 +80,43 @@ class ListingsController {
       return res.json(newListing);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  async changeListingStatus(req, res) {
+    try {
+      const { listingId, listingStatus } = req.body;
+      const listing = await this.listingModel.update(
+        {
+          listingStatus: listingStatus,
+        },
+        {
+          where: {
+            id: listingId,
+          },
+        }
+      );
+      return res.json(listing);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  async changeListingsStatuses(req, res) {
+    const listingsToUpdate = req.body;
+    try {
+      await Promise.all(
+        listingsToUpdate.map((listingUpdate) => {
+          const { listingId, listingStatus } = listingUpdate;
+          return this.listingModel.update(
+            { listingStatus: listingStatus },
+            { where: { id: listingId } }
+          );
+        })
+      );
+      return res.json({ success: true, msg: "Listings statuses updated successfully" });
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err.message });
     }
   }
 
