@@ -1,9 +1,10 @@
 const { Op } = require("sequelize");
 
 class TradesController {
-  constructor(tradeModel, listingsTradesModel) {
+  constructor(tradeModel, listingsTradesModel, usersModel) {
     this.tradeModel = tradeModel;
     this.listingsTradesModel = listingsTradesModel;
+    this.usersModel = usersModel;
   }
 
   async getAll(req, res) {
@@ -52,6 +53,11 @@ class TradesController {
           listingAcceptor: userId,
           tradeStatus: tradeStatus,
         },
+        include: [
+          { model: this.usersModel, as: "Initiator" },
+          { model: this.usersModel, as: "Acceptor" },
+        ],
+        logging: console.log,
       });
       return res.json(trade);
     } catch (err) {
@@ -134,7 +140,7 @@ class TradesController {
     }
   }
 
-  async reverseUpdateAgreedStatus(req,res) {
+  async reverseUpdateAgreedStatus(req, res) {
     const { tradeId, whoAgreed } = req.body;
     let updatedAgree;
     try {

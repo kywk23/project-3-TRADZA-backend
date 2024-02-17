@@ -58,7 +58,7 @@ async function initializeApp() {
     user,
     listing_display_picture
   );
-  const tradesController = new TradesController(trade, listings_trades);
+  const tradesController = new TradesController(trade, listings_trades, user);
   const listingsTradesController = new ListingsTradesController(listings_trades);
   const categoriesController = new CategoriesController(
     category,
