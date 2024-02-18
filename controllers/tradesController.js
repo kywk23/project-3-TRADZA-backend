@@ -38,6 +38,10 @@ class TradesController {
           listingInitiator: userId,
           tradeStatus: tradeStatus,
         },
+        include: [
+          { model: this.usersModel, as: "Initiator" },
+          { model: this.usersModel, as: "Acceptor" },
+        ]
       });
       return res.json(trade);
     } catch (err) {
@@ -73,6 +77,10 @@ class TradesController {
           [Op.or]: [{ listingInitiator: userId }, { listingAcceptor: userId }],
           tradeStatus: tradeStatus,
         },
+        include: [
+          { model: this.usersModel, as: "Initiator" },
+          { model: this.usersModel, as: "Acceptor" },
+        ],
       });
       return res.json(trade);
     } catch (err) {
